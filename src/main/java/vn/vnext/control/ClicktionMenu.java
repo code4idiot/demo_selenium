@@ -1,9 +1,14 @@
 package vn.vnext.control;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.File;
+import java.util.Date;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
 
@@ -21,8 +26,8 @@ public class ClicktionMenu extends Init{
     
     public void clickMenu() {
         
-        // close popup
         WebDriverWait wait = new WebDriverWait(driver, 5);
+        TakesScreenshot scrShot =((TakesScreenshot)driver);
 
 //        for (int i = 0; i < 5; i++) {
 //            for (int j = 0; j < 2; j++) {
@@ -34,9 +39,13 @@ public class ClicktionMenu extends Init{
         try {
             for (int i = 1; i <= 5; i++) {
                 for (int j = 1; j <= 2; j++) {
+                    
                     driver.findElement(By.xpath("/html/body/div[2]/section[2]/div/div/div/div/div/div/div[1]/div[2]/ul/li[3]/a/span")).click();
+                    File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
+                    FileUtils.copyFile(SrcFile, setFile());
                     driver.findElement(By.xpath("/html/body/div[2]/section[2]/div/div/div/div/div/div/div[1]/div[5]/div[1]/div/div[" + i + "]/ul/li[" + j + "]/a/span")).click();
                     wait.until(titleContains(menuTesting[j-1][i-1]));
+                    
                 }
             }
         } catch (Exception e) {
@@ -44,7 +53,11 @@ public class ClicktionMenu extends Init{
         } finally {
             driver.quit();
         }
-
-        
+    }
+    
+    public File setFile() {
+        Date date = new Date();
+        File destFile=new File("../EvidenceSelenium/" + date.getTime() + ".png");
+        return destFile;
     }
 }
