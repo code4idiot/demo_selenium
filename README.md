@@ -1,3 +1,3 @@
 # demo_selenium
 
-Example: Access a link, for loop all menu and take screen to make evidence
+Example: Access a link, for loop child in a menu and take screen to make evidence
