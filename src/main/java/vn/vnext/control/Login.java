@@ -5,6 +5,8 @@ import org.jxls.util.JxlsHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import vn.vnext.enity.User;
 
@@ -21,36 +23,49 @@ public class Login extends Init{
         this.driver = getDriver();
         this.driver.get(url);
         users = new ArrayList<User>();
-        users.add(new User("khiemnd5@gmail.com", "Khiem28121993", ""));
-        users.add(new User("khiemnd5@gmail.com", "Khiem2812199", ""));
+//        users.add(new User("khiemnd5@gmail.com", "Khiem28121993", ""));
+//        users.add(new User("khiemnd5@gmail.com", "Khiem2812199", ""));
 
-        loginTiki();
+        loginStackOverflow();
     }
 
-    public void loginTiki() {
-        WebDriverWait wait = new WebDriverWait(driver, 2);
-        try {
-            driver.findElement(By.cssSelector("html.js.no-touchevents.-moz- body.tiki-login.firefox.ReactModal__Body--open div.ReactModalPortal div.ReactModal__Overlay.ReactModal__Overlay--after-open div.ReactModal__Content.ReactModal__Content--after-open div.popup-sms button.popup-sms__close")).click();
-        } catch (Exception e) {
+    public void loginStackOverflow() {
+        WebDriverWait wait = new WebDriverWait(driver, 7);
+        Actions actions = new Actions(driver);
 
-        }
+        WebElement emailElm = driver.findElement(By.xpath("//*[@id=\"email\"]"));
+        WebElement pwElm = driver.findElement(By.xpath("//*[@id=\"password\"]"));
 
-        WebElement emailElm = driver.findElement(By.id("email"));
-        WebElement pwElm = driver.findElement(By.id("password"));
+        //case 1: test login fail: password empty
+        emailElm.sendKeys("khiemnd5@gmail.com");
+        pwElm.sendKeys("");
 
-        //case 1: test login fail
+        // submit case 1
+        WebElement element = driver.findElement(By.xpath("//*[@id=\"submit-button\"]"));
+        actions.moveToElement(element).click().build().perform();
+        
+        // check pass or fail case 1
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[5]/div[3]/div/div")));
+        WebElement errLogin = driver.findElement(By.xpath("/html/body/div[5]/div[3]/div/div"));
+        String result = "Password cannot be empty.".equals(errLogin.getText()) ? "Pass" : "Fail";
+        users.add(new User("khiemnd5@gmail.com", "", result));
+
+        //case 2: test login fail : password is wrong
+        emailElm.clear();
         emailElm.sendKeys("khiemnd5@gmail.com");
         pwElm.sendKeys("xxxxxx");
 
-        driver.findElement(By.cssSelector("#login-form > form > div.form-group.last > button")).click();
+        // submit case 2
+        actions.moveToElement(element).click().build().perform();
 
-        WebElement errLogin = driver.findElement(By.xpath("//*[@id=\"login-form\"]/form/div[1]"));
+        // check pass or fail case 2
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[5]/div[3]/div/div[2]")));
+        WebElement errorCase2 = driver.findElement(By.xpath("/html/body/div[5]/div[3]/div/div[2]"));
 
-        System.out.println("Sai tên truy cập hoặc mật khẩu".equals(errLogin.getText()));
-
-
-
-
+        String resultCase2 = "The email or password is incorrect.".equals(errorCase2.getText()) ? "Pass" : "Fail";
+        users.add(new User("khiemnd5@gmail.com", "xxxxxx", resultCase2));
+        
+        exportResultToExcel();
     }
 
 
