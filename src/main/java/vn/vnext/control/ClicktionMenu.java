@@ -39,7 +39,6 @@ public class ClicktionMenu extends Init{
         try {
             for (int i = 1; i <= 5; i++) {
                 for (int j = 1; j <= 2; j++) {
-                    
                     driver.findElement(By.xpath("/html/body/div[2]/section[2]/div/div/div/div/div/div/div[1]/div[2]/ul/li[3]/a/span")).click();
                     File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
                     FileUtils.copyFile(SrcFile, setFile());
