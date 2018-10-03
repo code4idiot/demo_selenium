@@ -30,7 +30,7 @@ public class Login extends Init{
     }
 
     public void loginStackOverflow() {
-        WebDriverWait wait = new WebDriverWait(driver, 7);
+        WebDriverWait wait = new WebDriverWait(driver, 20);
         Actions actions = new Actions(driver);
 
         WebElement emailElm = driver.findElement(By.xpath("//*[@id=\"email\"]"));
@@ -45,8 +45,8 @@ public class Login extends Init{
         actions.moveToElement(element).click().build().perform();
         
         // check pass or fail case 1
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[5]/div[3]/div/div")));
-        WebElement errLogin = driver.findElement(By.xpath("/html/body/div[5]/div[3]/div/div"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[4]/div[3]/div/div")));
+        WebElement errLogin = driver.findElement(By.xpath("/html/body/div[4]/div[3]/div/div"));
         String result = "Password cannot be empty.".equals(errLogin.getText()) ? "Pass" : "Fail";
         users.add(new User("khiemnd5@gmail.com", "", result));
 
@@ -59,8 +59,8 @@ public class Login extends Init{
         actions.moveToElement(element).click().build().perform();
 
         // check pass or fail case 2
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[5]/div[3]/div/div[2]")));
-        WebElement errorCase2 = driver.findElement(By.xpath("/html/body/div[5]/div[3]/div/div[2]"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[4]/div[3]/div/div[2]")));
+        WebElement errorCase2 = driver.findElement(By.xpath("/html/body/div[4]/div[3]/div/div[2]"));
 
         String resultCase2 = "The email or password is incorrect.".equals(errorCase2.getText()) ? "Pass" : "Fail";
         users.add(new User("khiemnd5@gmail.com", "xxxxxx", resultCase2));
